@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Quem irá para o chamado?</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍴</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1 class="logo">
+      <span class="logo-mark" aria-hidden="true">🍴</span>
+      <span>Quem irá para o <em>chamado?</em></span>
+    </h1>
+    <button class="icon-btn" id="soundBtn" type="button" aria-label="Desligar som" title="Som">🔊</button>
+  </header>
+
+  <main class="layout">
+    <section class="stage" id="stage" aria-label="Roleta">
+      <div class="wheel-wrap" id="wheelWrap" tabindex="0" role="button" aria-label="Girar a roleta">
+        <canvas id="wheel" aria-hidden="true"></canvas>
+        <div class="gloss" aria-hidden="true"></div>
+        <div class="hub" id="hub" aria-hidden="true">
+          <div class="hub-ring"></div>
+          <div class="hub-photos" id="hubPhotos"></div>
+          <img class="hub-head" src="assets/rosto.png" alt="" draggable="false">
+        </div>
+        <div class="tap-hint" id="tapHint">Clique para girar</div>
+        <div class="pick-badge" id="pickBadge" hidden></div>
+        <div class="fallback-pointer" id="fallbackPointer" hidden></div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-head">
+        <h2>Participantes</h2>
+        <span class="count" id="count">0 nomes</span>
+      </div>
+      <textarea id="names" spellcheck="false" placeholder="Digite um nome por linha" aria-label="Lista de nomes, um por linha"></textarea>
+      <div class="row">
+        <button class="btn ghost" id="shuffleBtn" type="button">🔀 Embaralhar</button>
+        <button class="btn ghost" id="clearBtn" type="button">🧹 Limpar</button>
+      </div>
+
+      <div class="mode" role="radiogroup" aria-label="Modo de sorteio">
+        <button class="mode-btn" type="button" role="radio" data-mode="solo">👤 Solo</button>
+        <button class="mode-btn" type="button" role="radio" data-mode="dupla">👥 Dupla</button>
+      </div>
+      <button class="spin-btn" id="spinBtn" type="button">GIRAR</button>
+      <p class="spin-note" id="spinNote" hidden></p>
+
+      <div class="history">
+        <h3>Últimos sorteados</h3>
+        <ol id="history"></ol>
+        <p class="history-empty" id="historyEmpty">Nenhum sorteio ainda.</p>
+      </div>
+    </aside>
+  </main>
+
+  <div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalKicker">
+    <div class="modal-card">
+      <p class="modal-kicker" id="modalKicker">🎉 Quem vai para o chamado é…</p>
+      <div class="winners" id="winners"></div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="removeBtn" type="button">Remover da lista</button>
+        <button class="btn primary" id="closeBtn" type="button">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="fork3d.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
