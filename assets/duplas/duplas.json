@@ -1,3 +1,15 @@
 {
-  "duplas": []
+  "duplas": [
+    {
+      "pessoas": [
+        "gabriel",
+        "luis-arthur"
+      ],
+      "nomes": [
+        "Gabriel",
+        "Luis Arthur"
+      ],
+      "arquivo": "assets/duplas/gabriel__luis-arthur-mweyp9rd.jpg"
+    }
+  ]
 }
