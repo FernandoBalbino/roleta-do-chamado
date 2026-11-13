@@ -333,6 +333,7 @@
     el.count.textContent = names.length === 1 ? '1 nome' : `${names.length} nomes`;
     store.set(NAMES_KEY, el.names.value);
     if (!busy()) resetCenter();
+    if (window.Duplas) window.Duplas.refresh(); // atualiza o progresso das fotos de duplas
     updateControls();
     renderWheelTexture();
   }

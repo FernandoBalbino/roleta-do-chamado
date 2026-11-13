@@ -44,7 +44,11 @@
     status: $('#pairsStatus'),
     list: $('#pairsList'),
     empty: $('#pairsEmpty'),
+    summary: $('#pairsSummary'),
+    bar: $('#pairsBar'),
+    progress: $('#pairsProgress'),
   };
+  const BTN_LABEL = '📸 Fotos de duplas';
 
   let entries = [];          // [{ pessoas: [idA, idB], nomes: [A, B], arquivo }]
   const localUrls = {};      // fotos recém-enviadas (antes do GitHub Pages publicar)
@@ -265,7 +269,88 @@
     });
   }
 
+  // Pessoas da lista atual (sem repetir a mesma pessoa).
+  function people() {
+    const seen = new Set();
+    const out = [];
+    for (const name of R.getNames()) {
+      const id = idOf(name);
+      if (!seen.has(id)) { seen.add(id); out.push({ id, name }); }
+    }
+    return out;
+  }
+
+  // Progresso: para cada pessoa, com quem já tem foto de dupla e com quem falta.
+  function renderProgress() {
+    const ps = people();
+    const counts = new Map();
+    for (const e of entries) { const k = keyOf(e.pessoas); counts.set(k, (counts.get(k) || 0) + 1); }
+    const total = (ps.length * (ps.length - 1)) / 2;
+    let done = 0;
+    for (let i = 0; i < ps.length; i++) for (let j = i + 1; j < ps.length; j++) if (counts.has(keyOf([ps[i].id, ps[j].id]))) done++;
+
+    ui.openBtn.textContent = total ? `${BTN_LABEL} · ${done}/${total}` : BTN_LABEL;
+    ui.bar.style.width = total ? `${Math.round((done / total) * 100)}%` : '0%';
+    ui.summary.textContent = '';
+    if (ps.length < 2) {
+      ui.summary.textContent = 'Coloque pelo menos 2 nomes na lista para ver as duplas.';
+    } else if (done === total) {
+      ui.summary.textContent = `🎉 Todas as ${total} duplas já têm foto!`;
+    } else {
+      const b = document.createElement('b');
+      b.textContent = `${done} de ${total}`;
+      ui.summary.append(b, ` duplas com foto · faltam ${total - done}`);
+    }
+
+    ui.progress.textContent = '';
+    for (const p of ps) {
+      const partners = ps.filter((q) => q.id !== p.id);
+      const have = partners.filter((q) => counts.has(keyOf([p.id, q.id]))).length;
+      const row = document.createElement('div');
+      row.className = `prog-row${have === partners.length ? ' complete' : ''}`;
+      const head = document.createElement('div');
+      head.className = 'prog-head';
+      const nm = document.createElement('span');
+      nm.textContent = p.name;
+      const ct = document.createElement('span');
+      ct.className = 'prog-count';
+      ct.textContent = have === partners.length ? `✓ ${have}/${partners.length} completo` : `${have}/${partners.length}`;
+      head.append(nm, ct);
+      const chips = document.createElement('div');
+      chips.className = 'chips';
+      for (const q of partners) {
+        const n = counts.get(keyOf([p.id, q.id])) || 0;
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        if (n) {
+          chip.className = 'chip ok';
+          chip.textContent = `✓ ${q.name}${n > 1 ? ` ×${n}` : ''}`;
+          chip.title = `${p.name} & ${q.name} já tem ${n > 1 ? `${n} fotos` : 'foto'}`;
+          chip.tabIndex = -1;
+        } else {
+          chip.className = 'chip miss';
+          chip.textContent = `+ ${q.name}`;
+          chip.title = `Adicionar foto de ${p.name} & ${q.name}`;
+          chip.addEventListener('click', () => preselect(p.name, q.name));
+        }
+        chips.append(chip);
+      }
+      row.append(head, chips);
+      ui.progress.append(row);
+    }
+  }
+
+  // Clicar numa dupla que falta já preenche o formulário.
+  function preselect(a, b) {
+    fillSelects();
+    ui.a.value = a;
+    ui.b.value = b;
+    setStatus(token ? `Escolha a foto de ${a} & ${b}.` : `Conecte com o token para enviar a foto de ${a} & ${b}.`);
+    ui.form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
   function renderList() {
+    renderProgress();
     ui.list.textContent = '';
     for (const e of entries) {
       const li = document.createElement('li');
@@ -393,6 +478,6 @@
     if (ok) clearFile();
   });
 
-  window.Duplas = { find, srcOf };
+  window.Duplas = { find, srcOf, refresh: renderProgress };
   loadManifest();
 })();

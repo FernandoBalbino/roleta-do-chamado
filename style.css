@@ -640,6 +640,62 @@ textarea[readonly] { opacity: 0.7; }
 .pairs-list span { flex: 1; min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .btn.small { padding: 6px 10px; font-size: 13px; }
 
+/* progresso: quantas duplas de cada pessoa já têm foto */
+.progress-summary { margin: 0 0 8px; font-size: 15px; font-weight: 600; }
+.progress-summary b { color: var(--gold); }
+.prog-bar {
+  height: 8px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.prog-bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f7c948, #7ee2a8);
+  transition: width 0.4s;
+}
+.progress-list { display: grid; gap: 8px; }
+.prog-row {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.05);
+}
+.prog-row.complete { border-color: rgba(126, 226, 168, 0.4); background: rgba(126, 226, 168, 0.08); }
+.prog-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-weight: 600; }
+.prog-count {
+  flex: none;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 13px;
+  background: rgba(247, 201, 72, 0.16);
+  color: var(--gold);
+}
+.prog-row.complete .prog-count { background: rgba(126, 226, 168, 0.18); color: #7ee2a8; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.chip.miss:hover { color: var(--text); border-color: rgba(247, 201, 72, 0.7); }
+.chip.ok {
+  border-style: solid;
+  border-color: rgba(126, 226, 168, 0.35);
+  background: rgba(126, 226, 168, 0.15);
+  color: #7ee2a8;
+  cursor: default;
+}
+
 #confetti {
   position: fixed;
   inset: 0;
