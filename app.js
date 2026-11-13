@@ -686,8 +686,25 @@
     el.modalKicker.textContent = two ? '🎉 A dupla do chamado é…' : '🎉 Quem vai para o chamado é…';
     el.removeBtn.textContent = two ? 'Remover os dois' : 'Remover da lista';
     el.winners.textContent = '';
-    el.winners.classList.toggle('two', two);
-    picks.forEach((idx, i) => {
+    // dupla com foto cadastrada (Fotos de duplas): mostra a foto dos dois juntos
+    const pairPhoto = two && window.Duplas ? window.Duplas.find(names[picks[0]], names[picks[1]]) : null;
+    el.winners.classList.toggle('two', two && !pairPhoto);
+    if (pairPhoto) {
+      const fig = document.createElement('figure');
+      fig.className = 'winner';
+      const img = document.createElement('img');
+      img.src = window.Duplas.srcOf(pairPhoto);
+      img.alt = `${names[picks[0]]} & ${names[picks[1]]}`;
+      img.draggable = false;
+      const cap = document.createElement('figcaption');
+      const amp = document.createElement('span');
+      amp.className = 'amp-inline';
+      amp.textContent = ' & ';
+      cap.append(names[picks[0]], amp, names[picks[1]]);
+      fig.append(img, cap);
+      el.winners.append(fig);
+    }
+    if (!pairPhoto) picks.forEach((idx, i) => {
       if (i > 0) {
         const amp = document.createElement('div');
         amp.className = 'amp';
@@ -934,6 +951,9 @@
       showFallback();
     }
   }
+
+  // usado pelo duplas.js (fotos de duplas)
+  window.Roleta = { personFor, norm, getNames: () => names.slice() };
 
   init();
 })();

@@ -59,6 +59,8 @@
         <ol id="history"></ol>
         <p class="history-empty" id="historyEmpty">Nenhum sorteio ainda.</p>
       </div>
+
+      <button class="btn ghost pairs-btn" id="pairsBtn" type="button">📸 Fotos de duplas</button>
     </aside>
   </main>
 
@@ -73,9 +75,51 @@
     </div>
   </div>
 
+  <div class="modal" id="pairsModal" hidden role="dialog" aria-modal="true" aria-labelledby="pairsTitle">
+    <div class="modal-card pairs-card">
+      <button class="close-x" id="pairsClose" type="button" aria-label="Fechar">✕</button>
+      <h2 id="pairsTitle">📸 Fotos de duplas</h2>
+      <p class="hint">Quando o sorteio em dupla tirar um par que tem foto aqui, a foto aparece no resultado. As fotos ficam salvas no projeto do GitHub e valem para todo mundo que abrir o site.</p>
+
+      <div class="connected" id="pairsConnected" hidden>
+        <span>✓ Conectado ao GitHub</span>
+        <button class="link-btn" id="tokenForget" type="button">desconectar</button>
+      </div>
+      <div class="token-box" id="pairsToken">
+        <label class="field-label" for="ghToken">Token do GitHub (só para quem cadastra fotos)</label>
+        <div class="token-row">
+          <input class="input" id="ghToken" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+          <button class="btn primary" id="tokenSave" type="button">Conectar</button>
+        </div>
+        <label class="check"><input type="checkbox" id="tokenRemember" checked> Lembrar neste navegador</label>
+        <p class="hint">Crie em <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens</a>: acesso só ao repositório <b>roleta-do-chamado</b> e permissão <b>Contents: Read and write</b>. O token fica só neste navegador, nunca no código.</p>
+      </div>
+
+      <form class="pair-form" id="pairForm">
+        <div class="pair-names">
+          <select id="pairA" aria-label="Primeira pessoa"></select>
+          <span class="amp">&amp;</span>
+          <select id="pairB" aria-label="Segunda pessoa"></select>
+        </div>
+        <label class="file-pick">
+          <input type="file" id="pairFile" accept="image/*">
+          <span id="pairFileLabel">🖼️ Escolher a foto da dupla…</span>
+        </label>
+        <img class="pair-preview" id="pairPreview" alt="" hidden>
+        <button class="spin-btn pair-save" id="pairSave" type="submit">SALVAR FOTO DA DUPLA</button>
+        <p class="pairs-status" id="pairsStatus" role="status"></p>
+      </form>
+
+      <h3>Duplas com foto</h3>
+      <ul class="pairs-list" id="pairsList"></ul>
+      <p class="hint" id="pairsEmpty">Nenhuma foto de dupla ainda.</p>
+    </div>
+  </div>
+
   <canvas id="confetti" aria-hidden="true"></canvas>
 
   <script src="fork3d.js"></script>
   <script src="app.js"></script>
+  <script src="duplas.js"></script>
 </body>
 </html>
